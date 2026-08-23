@@ -16,7 +16,7 @@ A aplicação principal e sua implementação não são mantidas neste repositó
 
 ## Versão atual
 
-**VigifyOS 2.7**
+**VigifyOS 2.6**
 
 ---
 
