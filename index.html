@@ -10,7 +10,7 @@
     content="width=device-width, initial-scale=1.0, viewport-fit=cover"
   >
 
-  <title>VigifyOS</title>
+  <title>VigifyOS DEV</title>
 
   <style>
 
@@ -45,7 +45,6 @@
   <iframe
     id="vigifyApp"
     title="VigifyOS"
-    src="https://script.google.com/macros/s/AKfycbx6mzBUpV-38koutH0MEH07bhTwU_SDx5L2COmVMv2BURe4z4E8Fn670B9nczy2ToRbUA/exec?p=login&origem=portal"
     allow="camera; geolocation">
   </iframe>
 
@@ -60,37 +59,47 @@
       "VIGIFY_PORTAL_URL_ATUAL";
 
 
-    // ========================================================
-    // RESTAURA A NAVEGAÇÃO ATUAL DO VIGIFYOS
-    // ========================================================
-    function restaurarNavegacaoVigify() {
+// ========================================================
+// RESTAURA A NAVEGAÇÃO ATUAL DO VIGIFYOS
+// ========================================================
+function restaurarNavegacaoVigify() {
 
-      const urlSalva =
-        localStorage.getItem(
-          chaveNavegacaoVigify
-        );
+  const urlLogin =
+    "https://script.google.com/macros/s/AKfycbx6mzBUpV-38koutH0MEH07bhTwU_SDx5L2COmVMv2BURe4z4E8Fn670B9nczy2ToRbUA/exec?p=login&origem=portal";
 
-      if (!urlSalva) {
-        return;
-      }
+  const urlSalva =
+    localStorage.getItem(
+      chaveNavegacaoVigify
+    );
 
-      if (
-        !urlSalva.startsWith(
-          "https://script.google.com/macros/s/"
-        )
-      ) {
+  if (
+    urlSalva &&
+    urlSalva.startsWith(
+      "https://script.google.com/macros/s/"
+    )
+  ) {
 
-        localStorage.removeItem(
-          chaveNavegacaoVigify
-        );
+    iframeVigify.src =
+      urlSalva;
 
-        return;
-      }
+    return;
 
-      iframeVigify.src =
-        urlSalva;
+  }
 
-    }
+  if (
+    urlSalva
+  ) {
+
+    localStorage.removeItem(
+      chaveNavegacaoVigify
+    );
+
+  }
+
+  iframeVigify.src =
+    urlLogin;
+
+}
 
 
     // ========================================================
@@ -119,6 +128,40 @@
         ) {
           return;
         }
+
+// SALVA A SESSÃO ATUAL SEM RECARREGAR O IFRAME.
+if (
+  evento.data.tipo ===
+  "VIGIFY_SESSAO_ATUAL"
+) {
+
+  const urlSessao =
+    String(
+      evento.data.url || ""
+    ).trim();
+
+  if (
+    !urlSessao.startsWith(
+      "https://script.google.com/macros/s/"
+    )
+  ) {
+
+    console.error(
+      "URL de sessão Vigify inválida."
+    );
+
+    return;
+
+  }
+
+  localStorage.setItem(
+    chaveNavegacaoVigify,
+    urlSessao
+  );
+
+  return;
+
+}
 
         // SINCRONIZA A ROTA INTERNA DO ADMIN.
         if (
